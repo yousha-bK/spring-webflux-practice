@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  localstack:
+    image: localstack/localstack:0.12.0
+    container_name: swp-localstack
+    restart: always
+    ports:
+      - "4566-4597:4566-4597"
+      - "8010:8010"
+    environment:
+      - SERVICES=dynamodb
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8010
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - KINESIS_ERROR_PROBABILITY=0.01
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=ap-southeast-1
+    volumes:
+      - "./volume:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - spring-webflux-practice
+
+  dynamodb-admin:
+    depends_on:
+      - localstack
+    image: aaronshaf/dynamodb-admin
+    container_name: swp-dynamodb-admin
+    ports:
+      - "8001:8001"
+    environment:
+      - DYNAMO_ENDPOINT=http://localstack:4566
+    networks:
+      - spring-webflux-practice
+
+networks:
+  spring-webflux-practice:

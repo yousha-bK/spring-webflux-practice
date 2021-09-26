@@ -1,0 +1,33 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'spring.webflux.practice'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.4'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced:2.17.40'
+    implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
+    testImplementation 'io.projectreactor:reactor-test:3.4.10'
+}
+
+test {
+    useJUnitPlatform()
+}

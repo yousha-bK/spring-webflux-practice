@@ -1,0 +1,27 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "N"
+    },
+    {
+      "AttributeName": "createdAt",
+      "AttributeType": "N"
+    }
+  ],
+  "TableName": "dev-swp-post",
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "createdAt",
+      "KeyType": "RANGE"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  }
+}
