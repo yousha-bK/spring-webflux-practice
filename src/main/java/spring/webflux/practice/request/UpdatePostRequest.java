@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreatePostRequest implements Serializable {
+public class UpdatePostRequest implements Serializable {
 
     private Long id;
     private Long userId;

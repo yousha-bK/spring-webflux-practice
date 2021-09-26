@@ -1,7 +1,6 @@
 package spring.webflux.practice.repository.dynamodb;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
@@ -21,25 +20,29 @@ public class AbstractDynamoDBRepository<T> {
 
     private final DynamoDbAsyncTable<T> dynamoDbAsyncTable;
 
-    @Value("${app.profile}")
-    private String appProfile;
-
     protected AbstractDynamoDBRepository(String tableName,
                                          Class<T> beanClass,
                                          DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient) {
         this.dynamoDbAsyncTable = dynamoDbEnhancedAsyncClient
-                .table(getTableName(tableName), TableSchema.fromBean(beanClass));
+                .table(tableName, TableSchema.fromBean(beanClass));
     }
 
-    public PagePublisher<T> getAll() {
+    protected PagePublisher<T> getAll() {
         return dynamoDbAsyncTable.scan(ScanEnhancedRequest.builder().consistentRead(true).build());
     }
 
-    public PagePublisher<T> query(String partitionKeyValue) {
+    protected PagePublisher<T> getAll(String index) {
 
-        var queryKey = Key.builder()
-                .partitionValue(partitionKeyValue)
-                .build();
+        var scannedData = dynamoDbAsyncTable
+                .index(index)
+                .scan(ScanEnhancedRequest.builder()
+                        .consistentRead(false).build());
+
+
+        return PagePublisher.create(scannedData);
+    }
+
+    protected PagePublisher<T> query(Key queryKey) {
 
         var queryConditional = QueryConditional
                 .keyEqualTo(queryKey);
@@ -47,24 +50,28 @@ public class AbstractDynamoDBRepository<T> {
         return dynamoDbAsyncTable.query(r -> r.queryConditional(queryConditional).scanIndexForward(false));
     }
 
-    public CompletableFuture<Void> save(T t) {
+    protected CompletableFuture<Void> save(T t) {
 
         return dynamoDbAsyncTable.putItem(t);
     }
 
-    public CompletableFuture<T> update(T t) {
+    protected CompletableFuture<T> update(T t) {
 
         return dynamoDbAsyncTable.updateItem(t);
     }
 
-    public CompletableFuture<T> delete(T t) {
+    protected CompletableFuture<T> delete(Key key) {
 
-        return dynamoDbAsyncTable.deleteItem(t);
+        return dynamoDbAsyncTable.deleteItem(key);
     }
 
-    private String getTableName(String tableName) {
+    protected CompletableFuture<T> get(Key key) {
 
-        return appProfile + tableName;
+        return dynamoDbAsyncTable.getItem(key);
     }
 
+    protected DynamoDbAsyncTable<T> getTable() {
+
+        return dynamoDbAsyncTable;
+    }
 }

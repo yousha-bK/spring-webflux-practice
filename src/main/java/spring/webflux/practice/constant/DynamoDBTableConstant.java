@@ -12,4 +12,5 @@ public class DynamoDBTableConstant {
 
     public static final String POST_TABLE = TABLE_COMMON_PART + "-post";
 
+    public static final String POST_TABLE_GSI_CREATED_AT = "post-gi-createdAt";
 }

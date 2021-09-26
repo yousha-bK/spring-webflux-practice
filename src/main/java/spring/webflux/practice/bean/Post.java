@@ -3,6 +3,7 @@ package spring.webflux.practice.bean;
 import lombok.*;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.UpdateBehavior;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
+import spring.webflux.practice.constant.DynamoDBTableConstant;
 import spring.webflux.practice.util.TimeUtil;
 
 /**
@@ -16,7 +17,8 @@ import spring.webflux.practice.util.TimeUtil;
 @DynamoDbBean
 public class Post {
 
-    @Getter(onMethod_ = {@DynamoDbPartitionKey})
+    @Getter(onMethod_ = {@DynamoDbPartitionKey,
+            @DynamoDbSecondaryPartitionKey(indexNames = {DynamoDBTableConstant.POST_TABLE_GSI_CREATED_AT})})
     private Long id;
 
     @Getter(onMethod_ = {@DynamoDbAttribute("userId")})
@@ -28,7 +30,8 @@ public class Post {
     @Getter(onMethod_ = {@DynamoDbAttribute("body")})
     private String body;
 
-    @Getter(onMethod_ = {@DynamoDbAttribute("createdAt"), @DynamoDbSortKey})
+    @Getter(onMethod_ = {@DynamoDbAttribute("createdAt"),
+            @DynamoDbSecondarySortKey(indexNames = {DynamoDBTableConstant.POST_TABLE_GSI_CREATED_AT})})
     @Setter(onMethod_ = {@DynamoDbUpdateBehavior(UpdateBehavior.WRITE_IF_NOT_EXISTS)})
     @Builder.Default
     private Long createdAt = TimeUtil.getCurrentTimestampInSecond();

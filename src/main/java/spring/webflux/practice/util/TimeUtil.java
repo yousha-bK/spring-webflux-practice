@@ -31,4 +31,10 @@ public class TimeUtil {
 
         return getZonedDateTime().format(DETAIL_DATE_TIME_FORMATTER);
     }
+
+    public static String getTimestamp(Long timestamp) {
+
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZONE_ID_DHAKA)
+                .format(DETAIL_DATE_TIME_FORMATTER);
+    }
 }

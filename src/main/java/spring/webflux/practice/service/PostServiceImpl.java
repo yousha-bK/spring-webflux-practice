@@ -9,6 +9,7 @@ import spring.webflux.practice.bean.Post;
 import spring.webflux.practice.dto.PostDTO;
 import spring.webflux.practice.repository.dynamodb.PostRepository;
 import spring.webflux.practice.request.CreatePostRequest;
+import spring.webflux.practice.request.UpdatePostRequest;
 import spring.webflux.practice.response.CommonResponse;
 import spring.webflux.practice.response.PostListResponse;
 
@@ -40,5 +41,26 @@ public class PostServiceImpl implements PostService {
 
         return repository.savePost(modelMapper.map(request, Post.class))
                 .then(Mono.just(CommonResponse.builder().build()));
+    }
+
+    @Override
+    public Mono<PostDTO> get(Long id) {
+
+        return repository.getPost(id)
+                .map(post -> modelMapper.map(post, PostDTO.class));
+    }
+
+    @Override
+    public Mono<PostDTO> update(UpdatePostRequest request) {
+
+        return repository.updatePost(modelMapper.map(request, Post.class))
+                .map(post -> modelMapper.map(post, PostDTO.class));
+    }
+
+    @Override
+    public Mono<PostDTO> delete(Long id) {
+
+        return repository.deletePost(id)
+                .map(post -> modelMapper.map(post, PostDTO.class));
     }
 }

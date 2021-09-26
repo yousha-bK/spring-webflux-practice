@@ -14,10 +14,28 @@
     {
       "AttributeName": "id",
       "KeyType": "HASH"
-    },
+    }
+  ],
+  "GlobalSecondaryIndexes": [
     {
-      "AttributeName": "createdAt",
-      "KeyType": "RANGE"
+      "IndexName": "post-gi-createdAt",
+      "KeySchema": [
+        {
+          "AttributeName": "id",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "createdAt",
+          "KeyType": "Range"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
     }
   ],
   "ProvisionedThroughput": {
