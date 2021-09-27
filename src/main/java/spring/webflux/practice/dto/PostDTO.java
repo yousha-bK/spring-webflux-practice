@@ -1,5 +1,6 @@
 package spring.webflux.practice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,10 @@ public class PostDTO implements Serializable {
     private Long userId;
     private String title;
     private String body;
+
+    @JsonIgnore
     private Long createdAt;
+    @JsonIgnore
     private Long updatedAt;
 
     public static PostDTO of(Post post, ModelMapper modelMapper) {

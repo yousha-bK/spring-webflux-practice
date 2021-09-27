@@ -41,7 +41,6 @@ public class SwaggerConfiguration {
         return route(GET("/"), req ->
                 ServerResponse.temporaryRedirect(URI.create(contextPath + "/swagger-ui/"))
                         .build());
-
     }
 
     private ApiInfo apiInfo() {
