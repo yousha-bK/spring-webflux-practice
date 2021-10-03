@@ -1,7 +1,7 @@
 package spring.webflux.practice.service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import spring.webflux.practice.bean.Post;
 import spring.webflux.practice.dto.PostDTO;
 import spring.webflux.practice.request.CreatePostRequest;
 import spring.webflux.practice.request.UpdatePostRequest;
@@ -15,6 +15,8 @@ import spring.webflux.practice.response.PostListResponse;
 public interface PostService {
 
     Mono<PostListResponse> getAll();
+
+    Flux<PostDTO> getViewAllList();
 
     Mono<CommonResponse> create(CreatePostRequest request);
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import spring.webflux.practice.bean.Post;
 import spring.webflux.practice.dto.PostDTO;
@@ -34,6 +35,13 @@ public class PostServiceImpl implements PostService {
                 .map(postDTOs -> PostListResponse.builder()
                         .posts(postDTOs)
                         .build());
+    }
+
+    @Override
+    public Flux<PostDTO> getViewAllList() {
+
+        return repository.getAllPosts()
+                .map(post -> PostDTO.of(post, modelMapper));
     }
 
     @Override
